@@ -8,11 +8,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// In-memory storage fallback
+
 let tasks = [];
 let nextId = 1;
 
-// Optional MongoDB via Mongoose if MONGODB_URI is set
+
 const mongoose = require('mongoose');
 const useMongo = !!process.env.MONGODB_URI;
 let TaskModel = null;
@@ -23,11 +23,11 @@ if (useMongo) {
       dbName: process.env.MONGODB_DB || undefined
     })
     .then(() => {
-      // eslint-disable-next-line no-console
+
       console.log('Connected to MongoDB');
     })
     .catch((err) => {
-      // eslint-disable-next-line no-console
+
       console.error('MongoDB connection error:', err.message);
       process.exit(1);
     });
@@ -45,12 +45,11 @@ if (useMongo) {
   TaskModel = mongoose.model('Task', taskSchema);
 }
 
-// Routes
+
 app.get('/', (req, res) => {
   res.json({ status: 'ok', service: 'Task Manager API' });
 });
 
-// Create
 app.post('/tasks', async (req, res) => {
   try {
     const { title, description = '', completed = false, status = 'pending' } = req.body || {};
@@ -75,7 +74,6 @@ app.post('/tasks', async (req, res) => {
   }
 });
 
-// Read all
 app.get('/tasks', async (req, res) => {
   try {
     const { q, status } = req.query || {};
@@ -109,7 +107,6 @@ app.get('/tasks', async (req, res) => {
   }
 });
 
-// Read one
 app.get('/tasks/:id', async (req, res) => {
   try {
     const id = req.params.id;
@@ -127,7 +124,6 @@ app.get('/tasks/:id', async (req, res) => {
   }
 });
 
-// Update
 app.put('/tasks/:id', async (req, res) => {
   try {
     const id = req.params.id;
@@ -166,7 +162,6 @@ app.put('/tasks/:id', async (req, res) => {
   }
 });
 
-// Delete
 app.delete('/tasks/:id', async (req, res) => {
   try {
     const id = req.params.id;
@@ -187,7 +182,6 @@ app.delete('/tasks/:id', async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
   console.log(`Task Manager API listening on port ${PORT}`);
 });
 
